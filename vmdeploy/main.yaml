@@ -1,0 +1,43 @@
+-
+  hosts: localhost
+  connection: local
+  gather_facts: no
+#  vars:
+#    castom01: "{{ lookup('file','/opt/ccp_script/ignition/test.txt') }}"
+###
+  tasks:
+###
+  - name:  Deploying and customizing a virtual machine from Linux template.
+    vmware_guest:
+      hostname: "{{ item.vcenter_hostname }}"
+      username: "{{ item.vcenter_username }}"
+      password: "{{ item.vcenter_password }}"
+      validate_certs: no
+      folder: "/{{item.datacenter}}/vm"
+      datacenter: "{{ item.datacenter }}"
+      state: poweredoff
+      template: "{{ item.vm_template }}"
+      name: "{{ item.vm_name }}"
+      esxi_hostname: "{{ item.esxi_name }}"
+#      #cluster: "{{ item.cluster_name }}"
+      convert: thin
+      #resource_pool: "{{ item.res_pool }}"
+      hardware:
+        memory_mb: "{{ item.mem_mb }}"
+        num_cpus: "{{ item.total_cpus }}"
+        num_cpu_cores_per_socket: "{{ item.cpu_cores_per_socket }}"
+        scsi: paravirtual
+      disk:
+      - size_gb: "{{ item.disk_size0 }}"
+        type: thin
+        datastore: "{{ item.datastore }}"
+      customvalues:
+      - key: "guestinfo.ignition.config.data"
+        value: "{{ item.config_ign }}"
+      - key: "disk.EnableUUID"
+        value: "TRUE"
+      - key: "guestinfo.afterburn.initrd.network-kargs"
+        value: "{{ item.static_ip }}"
+    delegate_to: localhost
+    with_items: "{{ deploy }}"
+##
