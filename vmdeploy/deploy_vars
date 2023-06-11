@@ -1,0 +1,18 @@
+deploy:
+  - vcenter_hostname: "xxxx"
+    vcenter_username: "xxx"
+    vcenter_password: "xxxx"
+    datacenter: xxx
+    esxi_name: xxxx
+    vm_folder: /xxxvm
+    cluster_name: xxx
+    vm_template:  xxx
+    vm_name: xxx
+    mem_mb: xxxx
+    total_cpus: xx
+    cpu_cores_per_socket: xxx
+    vm_network: xxxx
+    disk_size0: xxx
+    datastore: xxxxx
+    config_ign: "{{lookup('file', './xx/xxx') }}"
+    static_ip: "ip=0.0.0.0::gateip:subnet:hostname:ens192:off:gateway"
